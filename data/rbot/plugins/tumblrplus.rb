@@ -14,12 +14,22 @@
 class TumblrPlus < Plugin
 
   def help(plugin, topic="")
-    "tumblr+ => Post urls in channels into tumblr feed."
+    "tumblrplus => Post urls in channels into tumblr feed."
+  end
+
+  def configure(m, params)
+    return unless m.kind_of?(PrivMessage) && m.private?
+    m.reply "#{m.replyto} you are going to configure tumblrplus for #{params[:channel]}"
+  end
+
+  def listen(m)
+    return unless m.kind_of?(PrivMessage)
+    return unless m.private?
+    line = "You said: #{m.plainmessage}"
+    m.reply "#{line}"
   end
 
 end
 
 plugin = TumblrPlus.new
-
-plugin.map "tumblrplus", :action => :help, :thread => "yes" #so it won't lock
-
+plugin.map "tumblrplus configure :channel", :action => :configure
